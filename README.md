@@ -1,2 +1,4 @@
 # northcoders-de-snippets
-Various examples of coding challenges from the course I have worked on
+A few choice examples of coding exercises set for us during the course.
+
+TODO: Intro to come.
