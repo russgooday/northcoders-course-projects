@@ -1,3 +1,7 @@
+""" 
+Exercise to implement a clone of Python's range object 
+that can be sliced and iterated over.
+"""
 import math
 from typing import Union
 from .internals import _NCRangeIterator
