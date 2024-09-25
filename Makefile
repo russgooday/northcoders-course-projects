@@ -15,7 +15,7 @@ clean:
 
 check-coverage:
 	@echo "Checking coverage..."
-	pytest --cov=countem --cov=iterators  --cov-fail-under=80
+	pytest --cov=countem --cov=iterators --cov=heapify --cov-fail-under=80
 
 lint:
 	@echo "Running linter..."
