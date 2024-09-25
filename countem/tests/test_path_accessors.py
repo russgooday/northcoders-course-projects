@@ -4,7 +4,7 @@
 
 import re
 from pytest import mark
-from countem import get_by_path
+from countem.src import get_by_path
 
 # Test cases for get_by_path
 test_cases_get_by_path = [

@@ -3,7 +3,7 @@
 # pylint: disable=missing-class-docstring
 
 from pytest import mark
-from countem import find_most_repeated
+from countem.src.find_most_repeated import find_most_repeated
 
 
 @mark.describe('Tests for find most repeated function')

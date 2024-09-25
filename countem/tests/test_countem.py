@@ -3,7 +3,7 @@
 # pylint: disable=missing-class-docstring
 
 from pytest import mark
-from countem import Countem
+from countem.src import Countem
 
 
 def format_ids(param):
