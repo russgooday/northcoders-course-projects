@@ -49,6 +49,5 @@ if __name__ == '__main__':
         return queue_time_index_min(queue, num_tills)
 
     print(timeit.timeit(time_test_queue_time_index_min, number=365))
-    # The built-in min and max are a bit faster than heap_replace
-    # It would be interesting to see how heap_replace performs when converted to C
+    # Updated to use a custom heap implementation written in CPython
     print(timeit.timeit(time_test_queue_time, number=365))
