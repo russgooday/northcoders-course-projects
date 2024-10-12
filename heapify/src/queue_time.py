@@ -2,6 +2,12 @@
 # pylint: disable=consider-using-max-builtin
 from . import heap_replace
 
+# try to import the heap_replace function from the C version of heap module
+try:
+    from heap import heap_replace
+except ImportError:
+    pass
+
 def queue_time(queue: list, num_tills: int=2) -> int:
     ''' calculates the total queue time for a queue with a given number of tills '''
     if not queue:
