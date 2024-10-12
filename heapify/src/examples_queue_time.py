@@ -1,4 +1,7 @@
-''' time comparison between queue_time and queue_time_index_min '''
+''' 
+    time comparison between queue_time using a custom heap implementations and 
+    queue_time_index_min using the built-in min and max functions.
+'''
 import timeit
 import random
 from .queue_time import queue_time
