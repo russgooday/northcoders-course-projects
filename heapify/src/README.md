@@ -31,3 +31,5 @@ queue_time([2, 3, 10], 2)
 ## How I approached this exercise
 
 ### Method:
+
+![min heapify anim](min-heapify.gif)
