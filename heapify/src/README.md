@@ -31,10 +31,3 @@ queue_time([2, 3, 10], 2)
 ## How I approached this exercise
 
 ### Method:
-
-<p class="codepen" data-height="300" data-default-tab="result" data-slug-hash="zYVQyyw" data-pen-title="heap visualisation" data-user="rpg2019" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
-  <span>See the Pen <a href="https://codepen.io/rpg2019/pen/zYVQyyw">
-  heap visualisation</a> by Russell (<a href="https://codepen.io/rpg2019">@rpg2019</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
