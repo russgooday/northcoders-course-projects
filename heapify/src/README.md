@@ -32,4 +32,4 @@ queue_time([2, 3, 10], 2)
 
 ### Method:
 
-<img src="min-heapify.gif" alt="drawing" style="display: block; width:600px; background-color: white;"/>
+To follow ...
