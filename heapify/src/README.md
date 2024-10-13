@@ -30,6 +30,8 @@ queue_time([2, 3, 10], 2)
 
 ## How I approached this exercise
 
-### Method:
+### Solution:
 
-To follow ...
+The solution to calculate the time required to process all customers is reasonably simple. Each till will keep a tally of the time taken to serve the customers. The till with the lowest tally will serve the next customer in the queue.
+
+<img alt='example of priority queue' width='600px' src='queue_example.gif'/>
