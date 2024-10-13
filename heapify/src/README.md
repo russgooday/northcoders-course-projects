@@ -32,6 +32,27 @@ queue_time([2, 3, 10], 2)
 
 ### Solution:
 
-The solution to calculate the time required to process all customers is reasonably simple. Each till will keep a tally of the time taken to serve the customers. The till with the lowest tally will serve the next customer in the queue.
+To calculate the time required to process all customers, we can use a simple approach. Each checkout till will maintain a running total of the time taken to serve its customers. The next customer in the queue will always go to the till with the current lowest total time.
+
+Once all customers have been served, the total time required will be the maximum value among all the tills' running totals.
+
+**A simple example with 2 tills and 6 customers.**
 
 <img alt='example of priority queue' width='600px' src='queue_example.gif'/>
+
+### The code:
+
+With a loop the built in `min` and `max` methods can be used to achieve this.
+
+```python
+# create a list of tills with initial times set to zero
+tills = [0] * num_tills
+
+for t in queue:
+    # find the index of the till with the lowest time
+    # and add to that the time of the current customer(t)
+    tills[tills.index(min(tills))] += t
+
+# return the till with the maximum value
+return max(tills)
+```
