@@ -44,28 +44,6 @@ Once all customers have been served, the total time required will be held in the
 
 With a loop the built in `min` and `max` methods can be used to achieve this.
 
-<svg fill="none" viewBox="0 0 600 600" width="600" height="600" xmlns="http://www.w3.org/2000/svg">
-    <foreignObject width="100%" height="100%">
-        <link rel='stylesheet' href='css/code.css'/>
-        <div xmlns="http://www.w3.org/1999/xhtml">
-            <pre>
-                <code>
-# create a list of tills with initial times set to zero
-tills = [0] * num_tills
-
-for t in queue:
-    # find the index of the till with the lowest time
-    # and add to that the time of the current customer(t)
-    tills[tills.index(min(tills))] += t
-
-# return the till with the maximum value
-return max(tills)
-                </code>
-            <pre>
-        </div>
-    </foreignObject>
-</svg>
-
 ```python
 # create a list of tills with initial times set to zero
 tills = [0] * num_tills
