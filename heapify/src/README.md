@@ -34,11 +34,11 @@ queue_time([2, 3, 10], 2)
 
 To calculate the time required to process all customers, we can use a simple approach. Each checkout till will maintain a running total of the time taken to serve its customers. The next customer in the queue will always go to the till with the current lowest total time.
 
-Once all customers have been served, the total time required will be the maximum value among all the tills' running totals.
+Once all customers have been served, the total time required will be held in the till with the maximum value.
 
 **A simple example with 2 tills and 6 customers.**
 
-<img alt='example of priority queue' width='600px' src='queue_example.gif'/>
+<img alt='example of priority queue' width='600px' src='images/queue_example.gif'/>
 
 ### The code:
 

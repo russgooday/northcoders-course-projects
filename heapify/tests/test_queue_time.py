@@ -30,7 +30,7 @@ class TestQueueTime():
         assert queue_time([9, 7, 5], 3) == 9
 
     @mark.it(
-        "passed a queue with numerous customers and numerous tills it should the total queue time"
+        "passed a queue with numerous customers and numerous tills it should equal the total queue time"
     )
     def test_with_numerous_customers_numerous_tills(self):
         assert queue_time([2, 3, 10], 2) == 12
