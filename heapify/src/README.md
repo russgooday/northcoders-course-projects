@@ -1,3 +1,5 @@
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.7.0/github-markdown-dark.css'/>
+
 # Supermarket Queue
 You are a middle manager in a large supermarket chain, tasked with overseeing the checkout queue.
 
