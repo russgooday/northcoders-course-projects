@@ -81,6 +81,8 @@ The time complexity for adding and removing elements is logarithmic, making it m
 
 <img alt='example of heap replace' width='600px' src='src/images/heap-replace.gif'/>
 
+> As an aside I created the animation for this example in Javascript. The code can be found [here](https://codepen.io/rpg2019/project/editor/XLdQPk).
+
 ### Custom heap module (Python)
 
 Driven by curiosity and a desire to deepen my understanding of the heap algorithm, I explored the topic further — my new copy of Introduction to Algorithms (Fourth Edition) proved especially helpful.
