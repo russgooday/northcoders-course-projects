@@ -38,7 +38,7 @@ Once all customers have been served, the total time required will be held in the
 
 **A simple example with 2 tills and 6 customers.**
 
-<img alt='example of priority queue' width='600px' src='images/queue_example.gif'/>
+<img alt='example of priority queue' width='600px' src='src/images/queue_example.gif'/>
 
 ### A min-max solution:
 
@@ -71,7 +71,7 @@ right_child = i * 2 + 2
 parent = (i - 1) / 2
 ```
 
-<img alt='heap visualisation' width='600px' src='images/heap-visualisation.gif'/>
+<img alt='heap visualisation' width='600px' src='src/images/heap-visualisation.gif'/>
 
 ### Example of heapreplace
 
@@ -79,7 +79,7 @@ The following example demonstrates the `heapreplace` function. The root node is 
 
 The time complexity for adding and removing elements is logarithmic, making it more efficient for larger queues than using `min` and `max`.
 
-<img alt='example of heap replace' width='600px' src='images/heap-replace.gif'/>
+<img alt='example of heap replace' width='600px' src='src/images/heap-replace.gif'/>
 
 ### Custom heap module (Python)
 
@@ -230,7 +230,7 @@ To actually make a usable module for Python, I had to learn about the [CPython A
 
 It was a steep learning curve, of which I only scratched the surface. I confess I ended up doing a lot cross referencing between heapq's C implementation and the CPython documentation. Learning about PyObjects, error handling, reference handling and the various methods to interact with Python objects was a lot to take in.
 
-The final implementation can be found in the [heapify.c](internals/lib/_heapify.c) file.
+The final implementation can be found in the [heapify.c](src/internals/lib/_heapify.c) file.
 
 Having looked through Python's built in modules I am aware that my code is somewhat naieve. That said with the brief tests I did, the CPython module was considerably faster than the built-in `min` and `max`.
 
