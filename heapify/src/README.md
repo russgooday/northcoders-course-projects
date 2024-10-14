@@ -114,4 +114,4 @@ In the brief tests I did, the CPython module was 3x faster than the built-in `mi
 
 ### Conclusion
 
-The project could have been signed off with the Python built-ins or the heapq module. I used this project as a learning exercise, to improve my programming skills and getter a broader knowledge of algorithms. Altogether, very enjoyable.
+The project could have been signed off with the Python built-ins or the heapq module. I used this project as a learning exercise, to improve my programming skills and getter a broader knowledge of algorithms. Altogether, a very enjoyable and rewarding exercise.
