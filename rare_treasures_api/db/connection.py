@@ -5,6 +5,10 @@ from fastapi import HTTPException
 
 load_dotenv()
 
+print(env.get('PG_USER'))
+print(env.get('PG_DATABASE'))
+
+
 class CreateConnection():
     ''' context manager for connection '''
     def __init__(self):
