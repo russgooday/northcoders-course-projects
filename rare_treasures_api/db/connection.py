@@ -5,10 +5,6 @@ from fastapi import HTTPException
 
 load_dotenv()
 
-print(env.get('PG_USER'))
-print(env.get('PG_DATABASE'))
-
-
 class CreateConnection():
     ''' context manager for connection '''
     def __init__(self):
@@ -21,7 +17,8 @@ class CreateConnection():
                 password=env.get('PG_PASSWORD'),
                 database=env.get('PG_DATABASE'),
                 host=env.get('PG_HOST'),
-                port=int(env.get('PG_PORT'))
+                port=int(env.get('PG_PORT')),
+                ssl_context=True
             )
             return self.connection
         except DatabaseError as exc:
