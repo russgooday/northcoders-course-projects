@@ -1,0 +1,58 @@
+{# templates/index.html #}
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+    <title>Home Page</title>
+    <link rel='stylesheet' href='../public/css/treasures.min.css'>
+</head>
+
+<body>
+    <h1>Add a New Item to a Shop</h1>
+    <div class='container'>
+        <form
+            hx-post='/api/treasures'
+            id='treasure_add_item'
+        >
+            <fieldset>
+                <label for='treasure_name'>Name:
+                    <input
+                        type='text'
+                        name='treasure_name'
+                        id='treasure_name'
+                        pattern='[a-zA-Z0-9 ]{1,100}'
+                        placeholder='Name of item'
+                    />
+                </label>
+                <label for='age'>Age:
+                    <input
+                        type='number'
+                        name='age'
+                        id='age'
+                        min='1'
+                    />
+                </label>
+                <label for='colour'>Colour:
+                    <input
+                        type='text'
+                        name='colour'
+                        id='colour'
+                        pattern='[a-zA-Z]{1,25}'
+                    />
+                </label>
+                <label for='cost_at_auction'>Cost at auction:
+                    <span>£</span>
+                    <input
+                        type='number'
+                        name='cost_at_auction'
+                        id='cost_at_auction'
+                    />
+                </label>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

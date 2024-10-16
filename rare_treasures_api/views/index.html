@@ -1,0 +1,47 @@
+{# templates/index.html #}
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+    <title>Home Page</title>
+    <link rel='stylesheet' href='../public/css/treasures.min.css'>
+</head>
+
+<body>
+    <h1>Cats Rare Treasures</h1>
+    {% if error_message %}
+    <div class='container'>
+        <p class='error-message'>{{ error_message }}</p>
+    </div>
+    {% else %}
+    <div class='container'>
+        <form hx-get='/api/treasures' id='treasure_options' hx-target='#treasures_table' hx-trigger='change, load'>
+            <label for='sort_by'>Sort by:
+                <select name='sort_by' id='sort_by'>
+                    <option value='age'>Age</option>
+                    <option value='treasure_name'>Treasure Name</option>
+                    <option value='cost_at_auction'>Cost at auction</option>
+                </select>
+            </label>
+            <label for='order'>Order:
+                <select name='order' id='order'>
+                    <option value='asc'>Ascending</option>
+                    <option value='desc'>Descending</option>
+                </select>
+            </label>
+            <label for='colour'>Colour:
+                <select name='colour' id='colour'>
+                    <option value=''>All</option>{% for colour in colours %}
+                    <option value='{{ colour }}'>{{ colour }}</option>{% endfor %}
+                </select>
+            </label>
+        </form>
+    </div>
+    <div class='container' id='treasures_table'></div>
+    {% endif %}
+</body>
+
+</html>

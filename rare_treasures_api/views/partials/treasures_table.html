@@ -1,0 +1,27 @@
+{# templates/treasures.html #}
+
+<table>
+  <colgroup>
+    <col class='treasure-name'/>
+    <col class='treasure-colour'/>
+    <col class='treasure-age'/>
+    <col class='treasure-cost'/>
+    <col class='shop-name'/>
+  </colgroup>
+  <tr>
+    <th>Treasure Name</th>
+    <th>Colour</th>
+    <th>Age</th>
+    <th>Cost at Auction</th>
+    <th>Shop Name</th>
+  </tr>
+  {% for treasure in treasures %}
+  <tr>
+    <td>{{ treasure.treasure_name }}</td>
+    <td>{{ treasure.colour }}</td>
+    <td>{{ treasure.age }}</td>
+    <td>£{{ '{:0.2f}'.format(treasure.cost_at_auction) }}</td>
+    <td>{{ treasure.shop_name }}</td>
+  </tr>
+  {% endfor %}
+</table>
