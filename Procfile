@@ -1,1 +1,1 @@
-web: fastapi dev rare_treasures_api/main.py
+web: uvicorn rare_treasures_api.main:app
