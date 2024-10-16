@@ -64,9 +64,10 @@ h1 {
 }
 
 p.error-message {
+  text-align: center;
   font-size: 1.2rem;
-  font-weight: 600;
-  color: #111;
+  font-weight: 500;
+  color: #333;
 }
 
 form#treasure_options {
