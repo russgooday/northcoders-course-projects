@@ -11,4 +11,4 @@ templates = Jinja2Templates(directory=f'{root_dir}/views')
 @router.get('/add-to-treasures', response_class=HTMLResponse)
 def add_to_treasure_page(request: Request) -> HTMLResponse:
     ''' add treasure item to treasures '''
-    return templates.TemplateResponse(request, name='add-to-treasures.html')
+    return templates.TemplateResponse(request, name='add-treasure.html')
