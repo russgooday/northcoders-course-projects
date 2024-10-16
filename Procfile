@@ -1,1 +1,1 @@
-web: fastapi dev main.py
+web: fastapi dev rare_treasures_api/main.py
