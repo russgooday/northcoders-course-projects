@@ -1,16 +1,14 @@
 ''' route handlers for treasures api '''
 from fastapi.responses import HTMLResponse
-from fastapi import APIRouter
-from jinja2 import Environment, FileSystemLoader
-
+from fastapi import APIRouter, Request
+from fastapi.templating import Jinja2Templates
+from ..dependencies import root_dir
 
 router = APIRouter()
-environment = Environment(loader=FileSystemLoader('views/'))
-add_to_shop_template = environment.get_template('add_treasure.html')
-
+templates = Jinja2Templates(directory=f'{root_dir}/views')
 
 # Add treasure item to a shop
-@router.get('/add-to-treasures')
-def add_to_treasure_page():
+@router.get('/add-to-treasures', response_class=HTMLResponse)
+def add_to_treasure_page(request: Request) -> HTMLResponse:
     ''' add treasure item to treasures '''
-    return HTMLResponse(add_to_shop_template.render())
+    return templates.TemplateResponse(request, name='add-to-treasures.html')

@@ -16,7 +16,6 @@ from ..models.model_treasures import (
 router = APIRouter()
 templates = Jinja2Templates(directory=f'{root_dir}/views')
 
-
 # Homepage
 @router.get('/', response_class=HTMLResponse)
 def homepage(request: Request, error:str = None) -> HTMLResponse:
