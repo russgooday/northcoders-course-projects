@@ -1,3 +1,7 @@
+fastapi[all]
+python-dotenv
+pg8000
+Jinja2
 pylint
 pytest
 pytest-testdox
