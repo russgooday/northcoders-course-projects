@@ -13,3 +13,5 @@ After taking offence at a remark about her business acumen, she has charged head
 - Know how to prevent SQL injection by validating client input
 - Be able to use python-dotenv to organise environment variables
 - Connect to different PostgreSQL databases programmatically
+
+[Demo](https://cats-rare-treasures-8217b8657659.herokuapp.com/)
