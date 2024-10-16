@@ -1,5 +1,5 @@
-from db.connection import CreateConnection
 import json
+from .connection import CreateConnection
 
 def seed_db(env='test'):
     print("\U0001FAB4", "Seeding Database...")
