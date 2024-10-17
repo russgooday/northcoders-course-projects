@@ -1,6 +1,7 @@
 ''' Calculate the total queue time for a queue with a given number of tills '''
 # pylint: disable=consider-using-max-builtin
 # pylint: disable=duplicate-code
+
 from . import heap_replace
 
 # try to import the heap_replace function from the C version of heap module
