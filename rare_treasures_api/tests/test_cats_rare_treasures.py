@@ -1,5 +1,4 @@
 '''This module contains the test suite for the `Cat's Rare Treasures` FastAPI app.'''
-
 from pytest import mark, fixture
 from fastapi.testclient import TestClient
 from rare_treasures_api.main import app
