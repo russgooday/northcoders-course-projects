@@ -9,6 +9,8 @@ APP_ENV = env.get('APP_ENV', default='dev')
 load_dotenv(f'.env.{APP_ENV}')
 
 print(f'\nAPP_ENV: {APP_ENV}')
+print(f'root_dir: {root_dir}')
+print(f'PG_PORT: {env.get("PG_PORT")}')
 
 class CreateConnection():
     ''' context manager for connection '''

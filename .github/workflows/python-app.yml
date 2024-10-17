@@ -47,7 +47,8 @@ jobs:
         env:
           ENV_DEV: ${{ secrets.RTA_ENV_DEV }}
         run: |
-          echo "${ENV_DEV}" > .env.dev
+          touch .env.dev
+          echo PG_PORT = "5432" > .env.dev
 
       - name: Run migrations
         run: |
