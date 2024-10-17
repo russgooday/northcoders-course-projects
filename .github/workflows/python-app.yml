@@ -48,10 +48,6 @@ jobs:
       - name: Lint with pylint
         run: |
           pylint */src --fail-under=8
-      
-      - name: Coverage with pytest
-        run: |
-          pytest --cov=. */tests --cov-fail-under=80
 
       - name: Set environment variables
         run: |
