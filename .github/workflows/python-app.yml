@@ -51,7 +51,7 @@ jobs:
           PG_DATABASE: ${{ secrets.PG_DATABASE }}
           PG_HOST: ${{ secrets.PG_HOST }}
           PG_PORT: '5432'
-          APP_ENV: 'test' 
+          APP_ENV: 'test'
 
       - name: Run migrations
         run: |
