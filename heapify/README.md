@@ -236,6 +236,12 @@ The final implementation can be found in the [heapify.c](src/internals/lib/_heap
 
 Having looked through Python's built in modules I am aware that my code is somewhat naieve. That said with the brief tests I did, the CPython module was considerably faster than the built-in `min` and `max`.
 
+To install the heapify module, run the following command:
+
+```bash
+pip install heapify/src/dist/heap-1.0.tar.gz
+```
+
 ### Conclusion
 
 This exercise was a great learning experience. I was able to explore the heap algorithm in depth, and I gained a better understanding of how Python's built-in functions work under the hood. I also learned about the CPython API and how to write Python modules in C.
