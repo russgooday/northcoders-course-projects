@@ -6,7 +6,7 @@ from fastapi import HTTPException
 from ..dependencies import root_dir
 
 APP_ENV = env.get('APP_ENV', default='dev')
-load_dotenv(dotenv_path=f'{root_dir}/.env.{APP_ENV}')
+load_dotenv(f'{root_dir}/.env.{APP_ENV}')
 
 print(f'\nAPP_ENV: {APP_ENV}')
 
