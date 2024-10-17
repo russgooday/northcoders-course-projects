@@ -3,7 +3,8 @@ from pytest import mark, fixture
 from fastapi.testclient import TestClient
 from rare_treasures_api.main import app
 from rare_treasures_api.utils.fp_getters import get_values
-# from db.seed import seed_db
+from rare_treasures_api.db.run_seed import run_seed
+run_seed('test')
 
 @fixture(scope='function')
 def test_client():
