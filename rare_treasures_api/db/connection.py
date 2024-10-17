@@ -1,24 +1,27 @@
+''' Database connection module '''
 from os import environ as env
 from dotenv import load_dotenv
 from pg8000.native import Connection, DatabaseError
 from fastapi import HTTPException
+from ..dependencies import root_dir
 
-load_dotenv()
+APP_ENV = env.get('APP_ENV', default='dev')
+load_dotenv(dotenv_path=f'{root_dir}/.env.{APP_ENV}')
+print(f'\nAPP_ENV: {APP_ENV}')
 
 class CreateConnection():
     ''' context manager for connection '''
-    def __init__(self, prefix='PG'):
+    def __init__(self):
         self.connection = None
-        self.prefix = prefix
 
     def __enter__(self):
         try:
             self.connection = Connection(
-                env.get(f'{self.prefix}_USER'),
-                password=env.get(f'{self.prefix}_PASSWORD'),
-                database=env.get(f'{self.prefix}_DATABASE'),
-                host=env.get(f'{self.prefix}_HOST'),
-                port=int(env.get(f'{self.prefix}_PORT')),
+                env.get('PG_USER'),
+                password=env.get('PG_PASSWORD'),
+                database=env.get('PG_DATABASE'),
+                host=env.get('PG_HOST'),
+                port=int(env.get('PG_PORT')),
                 ssl_context=True
             )
             return self.connection
