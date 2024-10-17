@@ -1,9 +1,0 @@
-README.md
-pyproject.toml
-heap.egg-info/PKG-INFO
-heap.egg-info/SOURCES.txt
-heap.egg-info/dependency_links.txt
-heap.egg-info/top_level.txt
-internals/__init__.py
-internals/_heapify.py
-internals/lib/_heapify.c
