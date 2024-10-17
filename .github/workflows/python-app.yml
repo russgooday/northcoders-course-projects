@@ -51,12 +51,7 @@ jobs:
           PG_DATABASE: ${{ secrets.PG_DATABASE }}
           PG_HOST: ${{ secrets.PG_HOST }}
           PG_PORT: '5432'
-          APP_ENV: 'test' 
-
-      - name: Run migrations
-        run: |
-          # Run migrations to setup the test database
-          alembic upgrade head
+          APP_ENV: 'test'
 
       - name: Lint with flake8
         run: |
@@ -68,4 +63,4 @@ jobs:
         env:
             DATABASE_URL: postgres://u6uvbkvio5sfml:p1407c445161c0bb47609355dbb622f5c6410ba31fb28f837d4f99fb002d93702@cd5gks8n4kb20g.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d50hd8totqj9i2
         run: |
-          pytest
+          pytest rare_treasures_api/tests
