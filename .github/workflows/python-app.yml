@@ -29,12 +29,12 @@ jobs:
 
       - name: Set environment variables
         run: |
-          touch .env.dev
-          echo PG_DATABASE = ${{ secrets.PG_DATABASE }} >> .env.dev
-          echo PG_USER = ${{ secrets.PG_USER }} >> .env.dev
-          echo PG_PASSWORD = ${{ secrets.PG_PASSWORD }} >> .env.dev
-          echo PG_HOST = ${{ secrets.PG_HOST }} >> .env.dev
-          echo PG_PORT = 5432 >> .env.dev
+          touch rare_treasures_api/.env.dev
+          echo PG_DATABASE = ${{ secrets.PG_DATABASE }} >> rare_treasures_api/.env.dev
+          echo PG_USER = ${{ secrets.PG_USER }} >> rare_treasures_api/.env.dev
+          echo PG_PASSWORD = ${{ secrets.PG_PASSWORD }} >> rare_treasures_api/.env.dev
+          echo PG_HOST = ${{ secrets.PG_HOST }} >> rare_treasures_api/.env.dev
+          echo PG_PORT = 5432 >> rare_treasures_api/.env.dev
 
       - name: Run migrations
         run: |
