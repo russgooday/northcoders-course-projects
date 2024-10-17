@@ -6,6 +6,7 @@ pylint
 pytest
 pytest-testdox
 pytest-cov
+pytest-env
 setuptools
 build
 heapify/src/dist/heap-1.0.tar.gz
