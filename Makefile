@@ -1,17 +1,18 @@
 VENV := venv
-PYTHON := $(VENV)/bin/python3.12
+PYTHON := $(VENV)/bin/python3.13
 PIP := $(VENV)/bin/pip
+
 all: venv
 
 $(VENV)/bin/activate: requirements.txt
-	python3.12 -m venv $(VENV)
+	python3.13 -m venv $(VENV)
 	$(PIP) install -r requirements.txt
 
 venv: $(VENV)/bin/activate
 
 clean:
 	rm -rf $(VENV)
-	find . -type f -name '*.pyc' -delete
+	rm -rf __pycache__
 
 check-coverage:
 	@echo "Checking coverage..."
@@ -23,6 +24,6 @@ lint:
 
 test:
 	@echo "Running tests..."
-	pytest
+	pytest rare_treasures_api/tests
 
 .PHONY: all lint clean test check-coverage
