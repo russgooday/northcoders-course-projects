@@ -7,7 +7,7 @@ This repo contains a collection of tasks that were set for us during the Northco
 Along with studying books and popular Python websites, I dedicated significant time to reviewing the source code of Python's standard libraries. This hands-on exploration of best practices and tools proved to be an invaluable learning experience.
 
 ## Projects
-- [Project 1: Find most repeated](countem)
+- [Project 1: Find most repeated](countem/src/internals/_countem.py)
 
     Drawing inspiration from the collections module, I developed a class to count the frequency of items in a list and identify the most common ones.
 
