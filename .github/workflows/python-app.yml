@@ -36,6 +36,14 @@ jobs:
           echo PG_HOST = ${{ secrets.PG_HOST }} >> rare_treasures_api/.env.dev
           echo PG_PORT = 5432 >> rare_treasures_api/.env.dev
 
+      - name: Lint with Pylint
+        run: |
+          pylint */src
+
+      - name: Coverage with pytest
+        run: |
+          pytest --cov=countem --cov=iterators --cov=heapify --cov-fail-under=80
+
       - name: Test with pytest
         run: |
-          pytest rare_treasures_api/tests
+          pytest
