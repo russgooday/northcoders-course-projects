@@ -2,6 +2,7 @@
     time comparison between queue_time using a custom heap implementations and 
     queue_time_index_min using the built-in min and max functions.
 '''
+# pylint: disable=duplicate-code
 import timeit
 import random
 from .queue_time import queue_time
