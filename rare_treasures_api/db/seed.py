@@ -3,7 +3,7 @@ from .connection import CreateConnection
 
 def seed_db(env='test'):
     print("\U0001FAB4", "Seeding Database...")
-    with CreateConnection() as db:
+    with CreateConnection('TEST') as db:
         db.run("DROP TABLE if exists treasures")
         db.run("DROP TABLE if exists shops")
 

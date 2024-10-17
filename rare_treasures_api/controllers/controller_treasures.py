@@ -13,19 +13,18 @@ from ..models.model_treasures import (
     fetch_colours
 )
 
+
 router = APIRouter()
 templates = Jinja2Templates(directory=f'{root_dir}/views')
 
+
 # Homepage
 @router.get('/', response_class=HTMLResponse)
-def homepage(request: Request, error:str = None) -> HTMLResponse:
+def homepage(request: Request) -> HTMLResponse:
     ''' return the home page '''
-    if error == '404':
-        context = {'error_message': 'Sorry page could not be found'}
-    else:
-        context={'colours': fetch_colours()}
-
-    return templates.TemplateResponse(request, name='index.html', context=context)
+    return templates.TemplateResponse(
+        request, name='index.html', context={'colours': fetch_colours()}
+    )
 
 
 # Initial healthcheck
@@ -45,7 +44,8 @@ def get_treasures(request: Request, params = Depends(TreasureQueryParams)) -> HT
         return templates.TemplateResponse(
             request, name='partials/treasures_table.html', context=treasures
         )
-    raise HTTPException(status_code=400, detail='Bad Request: unsuccessful query')
+
+    raise HTTPException(status_code=422, detail='Bad Request: unsuccessful query')
 
 
 # Add a treasure

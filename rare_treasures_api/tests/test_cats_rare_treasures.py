@@ -2,10 +2,9 @@
 
 from pytest import mark, fixture
 from fastapi.testclient import TestClient
-from main import app
-from utils.functional import get_values
+from rare_treasures_api.main import app
+from rare_treasures_api.utils.fp_getters import get_values
 # from db.seed import seed_db
-
 
 @fixture(scope='function')
 def test_client():
@@ -89,21 +88,21 @@ class TestTreasuresRouteHandlers:
         assert treasure_sorted_asc == sorted(treasure_sorted_asc, key=get_values('cost_at_auction'))
 
 
-    @mark.it('testing raises an error when given an invalid sort_by query parameter')
+    @mark.it('testing redirects with error 400 when given an invalid sort_by query parameter')
     def test_invalid_sort_query(self, test_client):
-        response_1 = test_client.get('/api/treasures?sort_by=abc_abc')
-        response_2 = test_client.get('/api/treasures?sort_by=id=1 OR 1=1')
+        response_1 = test_client.get('/api/treasures?sort_by=abc_abc').context
+        response_2 = test_client.get('/api/treasures?sort_by=id=1 OR 1=1').context
 
-        print(response_1.status_code == 422)
-        print(dir(response_1))
-        assert False
+        assert response_1['status_code'] == 400
+        assert response_1['message'] == '400 Bad Request: invalid query parameters'
 
-        # assert response_1['detail'] == 'Unprocessable Content: cannot sort with given key'
-        # assert response_2['detail'] == 'Bad Request: invalid sort by key'
+        assert response_2['status_code'] == 400
+        assert response_2['message'] == '400 Bad Request: invalid query parameters'
 
 
     @mark.it('testing responds with certain colour only')
     def test_filter_by_colour(self, get_treasures):
+        ''' test that the treasures are filtered by colour '''
         treasures = get_treasures('/api/treasures?colour=onyx')
 
         assert all(treasure['colour'] == 'onyx' for treasure in treasures)

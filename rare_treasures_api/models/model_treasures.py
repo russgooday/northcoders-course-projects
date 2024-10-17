@@ -8,7 +8,7 @@ from ..utils import format_response, flatten
 
 __all__ = [
     'fetch_colours', 
-    'fetch_shop_names', 
+    'fetch_shop_names',
     'fetch_treasures', 
     'insert_treasure', 
     'Treasure', 
@@ -71,7 +71,6 @@ def fetch_treasures(params: TreasureQueryParams) -> List[Dict]:
     WHERE (colour = :colour or :colour = 'NULL')
     ORDER BY {params.sort_by} {params.order};
     """
-
     with CreateConnection() as conn:
         rows = conn.run(sql, colour=params.colour)
         if conn.row_count:

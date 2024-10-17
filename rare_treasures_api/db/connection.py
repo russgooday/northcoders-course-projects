@@ -7,17 +7,18 @@ load_dotenv()
 
 class CreateConnection():
     ''' context manager for connection '''
-    def __init__(self):
+    def __init__(self, prefix='PG'):
         self.connection = None
+        self.prefix = prefix
 
     def __enter__(self):
         try:
             self.connection = Connection(
-                env.get('PG_USER'),
-                password=env.get('PG_PASSWORD'),
-                database=env.get('PG_DATABASE'),
-                host=env.get('PG_HOST'),
-                port=int(env.get('PG_PORT')),
+                env.get(f'{self.prefix}_USER'),
+                password=env.get(f'{self.prefix}_PASSWORD'),
+                database=env.get(f'{self.prefix}_DATABASE'),
+                host=env.get(f'{self.prefix}_HOST'),
+                port=int(env.get(f'{self.prefix}_PORT')),
                 ssl_context=True
             )
             return self.connection
