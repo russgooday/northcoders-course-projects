@@ -22,7 +22,7 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: rare_treasures_dev
+          POSTGRES_DB: dev_rare_treasures
           POSTGRES_USER: dev_user
           POSTGRES_PASSWORD: dev_password
         ports:
@@ -48,11 +48,14 @@ jobs:
       - name: Set environment variables
         run: |
           touch rare_treasures_api/.env.dev
-          echo PG_DATABASE = 'rare_treasures_dev' >> rare_treasures_api/.env.dev
-          echo PG_USER = 'dev_user' >> rare_treasures_api/.env.dev
-          echo PG_PASSWORD = 'dev_password' >> rare_treasures_api/.env.dev
-          echo PG_HOST = 'localhost' >> rare_treasures_api/.env.dev
-          echo PG_PORT = 5432 >> rare_treasures_api/.env.dev
+
+          echo <<EOF
+            PG_DATABASE = 'dev_rare_treasures'
+            PG_USER = 'dev_user'
+            PG_PASSWORD = 'dev_password'
+            PG_HOST = 'localhost'
+            PG_PORT = 5432
+          EOF >> rare_treasures_api/.env.dev
 
       - name: Test with pytest
         run: |
