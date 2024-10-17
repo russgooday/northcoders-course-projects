@@ -1,4 +1,4 @@
-<svg id="logo" fill="#EB1C24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" height="150px" width="100%"><path d="M174.924 200h25.068v-25.068L112.588 0H87.4123L0 174.932V200h25.0757L99.9959 50.0042 174.924 200z"></path></svg> 
+<img alt='Northcoders Logo' src='Northcoders-Logo.png' style='width: 150px; height: 150px; margin: 0 auto;'>
 
 # Northcoders Course Projects
 This repo contains a collection of tasks that were set for us during the Northcoders Data Engineering course. I have expanded on the briefs to include additional features and functionality in order to further explore more advanced concepts.
