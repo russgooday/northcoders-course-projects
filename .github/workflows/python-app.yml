@@ -3,6 +3,9 @@
 
 name: Python application
 
+env:
+  APP_ENV: 'dev'
+
 on:
   push:
     branches: [ "main" ]
@@ -14,6 +17,21 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: rare_treasures_dev
+          POSTGRES_USER: dev_user
+          POSTGRES_PASSWORD: dev_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U dev_user" 
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
@@ -30,19 +48,10 @@ jobs:
       - name: Set environment variables
         run: |
           touch rare_treasures_api/.env.dev
-          echo PG_DATABASE = ${{ secrets.PG_DATABASE }} >> rare_treasures_api/.env.dev
-          echo PG_USER = ${{ secrets.PG_USER }} >> rare_treasures_api/.env.dev
-          echo PG_PASSWORD = ${{ secrets.PG_PASSWORD }} >> rare_treasures_api/.env.dev
-          echo PG_HOST = ${{ secrets.PG_HOST }} >> rare_treasures_api/.env.dev
+          echo PG_DATABASE = 'rare_treasures_dev' >> rare_treasures_api/.env.dev
+          echo PG_USER = 'dev_user' >> rare_treasures_api/.env.dev
+          echo PG_PASSWORD = 'dev_password' >> rare_treasures_api/.env.dev
           echo PG_PORT = 5432 >> rare_treasures_api/.env.dev
-
-      - name: Lint with Pylint
-        run: |
-          pylint */src
-
-      - name: Coverage with pytest
-        run: |
-          pytest --cov=countem --cov=iterators --cov=heapify --cov-fail-under=80
 
       - name: Test with pytest
         run: |

@@ -5,7 +5,7 @@ from pg8000.native import Connection, DatabaseError
 from fastapi import HTTPException
 from ..dependencies import root_dir
 
-APP_ENV = env.get('APP_ENV', default='dev')
+APP_ENV = env.get('APP_ENV', default='test')
 load_dotenv(f'{root_dir}/.env.{APP_ENV}')
 
 print(f'\nAPP_ENV: {APP_ENV}')
