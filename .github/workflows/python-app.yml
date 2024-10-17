@@ -15,21 +15,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U user" 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.13
@@ -40,18 +25,17 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Set environment variables
-        env:
-          ENV_DEV: ${{ secrets.RTA_ENV_DEV }}
         run: |
           touch .env.dev
-          echo ${{ secrets.RTA_ENV_DEV }} > .env.dev
+          echo PG_DATABASE = ${{ secrets.PG_DATABASE }} >> .env.dev
+          echo PG_USER = ${{ secrets.PG_USER }} >> .env.dev
+          echo PG_PASSWORD = ${{ secrets.PG_PASSWORD }} >> .env.dev
+          echo PG_HOST = ${{ secrets.PG_HOST }} >> .env.dev
+          echo PG_PORT = 5432 >> .env.dev
 
       - name: Test with pytest
-        env:
-            DATABASE_URL: postgres://u6uvbkvio5sfml:p1407c445161c0bb47609355dbb622f5c6410ba31fb28f837d4f99fb002d93702@cd5gks8n4kb20g.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d50hd8totqj9i2
         run: |
           pytest rare_treasures_api/tests
