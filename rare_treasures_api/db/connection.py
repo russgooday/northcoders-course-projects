@@ -22,8 +22,7 @@ class CreateConnection():
                 password=env.get('PG_PASSWORD'),
                 database=env.get('PG_DATABASE'),
                 host=env.get('PG_HOST'),
-                port=int(env.get('PG_PORT')),
-                ssl_context=True
+                port=int(env.get('PG_PORT'))
             )
             return self.connection
         except DatabaseError as exc:
