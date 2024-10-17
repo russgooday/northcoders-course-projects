@@ -44,14 +44,10 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Set environment variables
-        run: echo "Setting environment variables"
         env:
-          PG_USER: ${{ secrets.PG_USER }}
-          PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          PG_DATABASE: ${{ secrets.PG_DATABASE }}
-          PG_HOST: ${{ secrets.PG_HOST }}
-          PG_PORT: '5432'
-          APP_ENV: 'dev'
+          ENV_DEV: ${{ secrets.RTA_ENV_DEV }}
+        run: |
+          ["APP_ENV" = dev] && echo "${ENV_DEV}" > .env.dev
 
       - name: Test with pytest
         env:
