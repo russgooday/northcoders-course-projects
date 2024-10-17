@@ -9,3 +9,6 @@ def run_seed(environment='test'):
     except Exception as e:
         print(e)
         raise e
+
+if __name__ == '__main__':
+    run_seed()
