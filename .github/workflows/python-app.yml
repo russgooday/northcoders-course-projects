@@ -48,7 +48,7 @@ jobs:
           ENV_DEV: ${{ secrets.RTA_ENV_DEV }}
         run: |
           touch .env.dev
-          echo ${{ ENV_DEV }} > .env.dev
+          echo ${{ secrets.RTA_ENV_DEV }} > .env.dev
 
       - name: Run migrations
         run: |
