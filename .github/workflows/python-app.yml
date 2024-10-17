@@ -49,13 +49,13 @@ jobs:
         run: |
           touch rare_treasures_api/.env.dev
 
-          echo <<EOF
+          echo <<EOF > rare_treasures_api/.env.dev
             PG_DATABASE = 'dev_rare_treasures'
             PG_USER = 'dev_user'
             PG_PASSWORD = 'dev_password'
             PG_HOST = 'localhost'
             PG_PORT = 5432
-          EOF >> rare_treasures_api/.env.dev
+          EOF
 
       - name: Test with pytest
         run: |
