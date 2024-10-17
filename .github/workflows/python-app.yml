@@ -48,7 +48,7 @@ jobs:
           ENV_DEV: ${{ secrets.RTA_ENV_DEV }}
         run: |
           touch .env.dev
-          echo PG_PORT = "5432" > .env.dev
+          echo ${{ ENV_DEV }} > .env.dev
 
       - name: Test with pytest
         env:
