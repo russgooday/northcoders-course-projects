@@ -1,13 +1,15 @@
 ''' Database connection module '''
 from os import environ as env
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from pg8000.native import Connection, DatabaseError
 from fastapi import HTTPException
-# from ..dependencies import root_dir
+from ..dependencies import root_dir
 
-# APP_ENV = env.get('APP_ENV', default='test')
-# load_dotenv(f'{root_dir}/.env.{APP_ENV}')
-# print(f'\nAPP_ENV: {APP_ENV}')
+APP_ENV = env.get('APP_ENV', default='test')
+load_dotenv(f'{root_dir}/.env.{APP_ENV}')
+
+print(f'\nAPP_ENV: {APP_ENV}')
+print(f'\nPG_PORT: {env.get("PG_PORT")}')
 
 class CreateConnection():
     ''' context manager for connection '''
