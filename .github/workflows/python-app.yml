@@ -45,10 +45,6 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Lint with pylint
-        run: |
-          pylint */src --fail-under=8
-
       - name: Set environment variables
         run: |
           touch rare_treasures_api/.env.dev
@@ -60,6 +56,14 @@ jobs:
               PG_HOST = localhost
               PG_PORT = 5432
           EOF
+
+      - name: Lint with pylint
+        run: |
+          pylint */src --fail-under=8
+
+      - name: Coverage with pytest
+        run: |
+          pytest --cov=. */tests --cov-fail-under=80
 
       - name: Test with pytest
         run: |
