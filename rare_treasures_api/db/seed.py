@@ -54,5 +54,3 @@ def seed_db(env='test'):
                 row_count += 1
 
             print(f'Successfully seeded {row_count} rows to `treasures` table in the database. \U0001F44D')
-
-
