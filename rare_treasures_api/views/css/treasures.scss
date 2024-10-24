@@ -1,12 +1,17 @@
 @import '__reset';
+@import 'https://assets.codepen.io/3351103/__reset.css';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 :root {
   --primary-color: hsl(165deg 85% 30%);
   --secondary-color: hsl(0, 0%, 92%);
   --hover-color: aliceblue; // hsl(85deg 20% 90%);
+  --width: fit-content;
 }
+
 body {
-  font-family: Poppins, sans-serif;
+  font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +24,7 @@ h1 {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1200px;
   min-width: 600px;
   width: 100%;
   margin-bottom: 1rem;
@@ -40,7 +45,7 @@ form#treasure_options {
 
   label {
     display: flex;
-    column-gap:.5rem;
+    column-gap: .5rem;
     align-items: center;
   }
 
@@ -60,6 +65,7 @@ form#treasure_options {
 table {
   border-collapse: collapse;
   width: 100%;
+  min-width: 576px;
   margin-bottom: 2rem;
   border-bottom: 2px solid var(--primary-color);
 
@@ -67,12 +73,29 @@ table {
     font-weight: 400;
   }
 
-  td, th {
+  td,
+  th {
     position: relative;
     border: 0;
     text-align: left;
     padding: 1rem 1.25rem;
   }
+
+  th.align-center {
+    text-align: center;
+  }
+
+  td:has(.align-right) {
+    font-family: 'Roboto Mono', sans-serif;
+  }
+
+  td .align-right {
+    display: flex;
+    justify-self: center;
+    justify-content: right;
+    width: var(--width);
+  }
+
 
   tr:first-child {
     vertical-align: top;
@@ -92,7 +115,7 @@ table {
   }
 }
 
-@media (width <= 768px) {
+@media (width <=768px) {
   form#treasure_options {
     label {
       flex-direction: column;

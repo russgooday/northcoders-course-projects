@@ -1,4 +1,6 @@
+@import 'https://assets.codepen.io/3351103/__reset.css';
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -41,10 +43,11 @@ fieldset {
   --primary-color: hsl(165deg 85% 30%);
   --secondary-color: hsl(0, 0%, 92%);
   --hover-color: aliceblue;
+  --width: fit-content;
 }
 
 body {
-  font-family: Poppins, sans-serif;
+  font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,7 +60,7 @@ h1 {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1200px;
   min-width: 600px;
   width: 100%;
   margin-bottom: 1rem;
@@ -98,17 +101,31 @@ form#treasure_options button {
 table {
   border-collapse: collapse;
   width: 100%;
+  min-width: 576px;
   margin-bottom: 2rem;
   border-bottom: 2px solid var(--primary-color);
 }
 table th {
   font-weight: 400;
 }
-table td, table th {
+table td,
+table th {
   position: relative;
   border: 0;
   text-align: left;
   padding: 1rem 1.25rem;
+}
+table th.align-center {
+  text-align: center;
+}
+table td:has(.align-right) {
+  font-family: "Roboto Mono", sans-serif;
+}
+table td .align-right {
+  display: flex;
+  justify-self: center;
+  justify-content: right;
+  width: var(--width);
 }
 table tr:first-child {
   vertical-align: top;

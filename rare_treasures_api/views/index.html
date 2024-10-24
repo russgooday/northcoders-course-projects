@@ -8,12 +8,27 @@
     <script src='https://unpkg.com/htmx.org@2.0.1'></script>
     <title>Home Page</title>
     <link rel='stylesheet' href='../public/css/treasures.min.css'>
+    <script>
+        function getFormData() {
+            const formData = new FormData(document.getElementById('treasure_options'));
+            const data = {};
+            for (const [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            return data;
+        }
+    </script>
 </head>
 
 <body>
     <h1>Cats Rare Treasures</h1>
     <div class='container'>
-        <form hx-get='/api/treasures' id='treasure_options' hx-target='#treasures_table' hx-trigger='change, load'>
+        <form
+            hx-get='/api/treasures'
+            id='treasure_options'
+            hx-target='#treasures_table'
+            hx-trigger='change, load'
+        >
             <label for='sort_by'>Sort by:
                 <select name='sort_by' id='sort_by'>
                     <option value='age'>Age</option>
@@ -29,13 +44,20 @@
             </label>
             <label for='colour'>Colour:
                 <select name='colour' id='colour'>
-                    <option value=''>All</option>{% for colour in colours %}
-                    <option value='{{ colour }}'>{{ colour }}</option>{% endfor %}
+                    <option value=''>All</option>
+                    {% for colour in colours %}
+                    <option value='{{ colour }}'>{{ colour }}</option>
+                    {% endfor %}
                 </select>
             </label>
         </form>
     </div>
     <div class='container' id='treasures_table'></div>
 </body>
+<script type='module'>
+    import { alignColumns } from '../public/js/main.js';
+    // align-right the numeric colums
+    document.body.addEventListener('htmx:afterRequest', () => alignColumns(3, 4));
+</script>
 
 </html>
