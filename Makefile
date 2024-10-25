@@ -1,11 +1,11 @@
 VENV := venv
-PYTHON := $(VENV)/bin/python3.13
+PYTHON := $(VENV)/bin/python3.12
 PIP := $(VENV)/bin/pip
 
 all: venv
 
 $(VENV)/bin/activate: requirements.txt
-	python3.13 -m venv $(VENV)
+	python3.12 -m venv $(VENV)
 	$(PIP) install -r requirements.txt
 
 venv: $(VENV)/bin/activate
