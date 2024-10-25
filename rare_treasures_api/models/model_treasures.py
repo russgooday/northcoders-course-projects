@@ -1,104 +1,174 @@
 ''' models and functions for treasures table '''
 
-from typing import Literal, Optional, Dict, List
-from pydantic import BaseModel, field_validator
+from typing import Literal, Optional, Any
+import pandas as pd
+from pydantic import BaseModel, field_validator, PositiveInt
 from fastapi import HTTPException
-from ..db.connection import CreateConnection
-from ..utils import format_response, flatten
+from sqlalchemy import select, insert, desc, asc
+from ..db.connection import create_connection
+from ..db.tables_classes import Treasures, Shops
 
-__all__ = [
-    'fetch_colours', 
+
+__all__: list[str] = [
+    'fetch_colours',
     'fetch_shop_names',
-    'fetch_treasures', 
-    'insert_treasure', 
-    'Treasure', 
+    'fetch_treasures',
+    'insert_treasure',
+    'TreasureFields',
     'TreasureQueryParams'
 ]
 
-class Treasure(BaseModel):
+
+class TreasureFields(BaseModel):
     ''' model for treasure '''
     treasure_name: str
-    colour: str
-    age: int
-    cost_at_auction: float
-    shop_name: str
+    colour: Optional[str] = None
+    age: Optional[int] = None
+    cost_at_auction: Optional[float] = None
+    shop_id: Optional[int] = None
 
 
 class TreasureQueryParams(BaseModel):
-    ''' model for treasure query parameters '''
-
+    ''' validation model for treasure query parameters '''
     sort_by: Literal['treasure_name', 'age', 'cost_at_auction'] = 'age'
     order: Literal['asc', 'desc'] = 'asc'
     colour: Optional[str] = None
+    page: PositiveInt = 1
 
     @field_validator('colour')
     @classmethod
-    def validate_colour(cls, colour: str) -> str:
+    def validate_colour(cls, colour: str) -> str | None:
         ''' checks the given colour against available colours '''
         if not colour:
-            return 'NULL'
+            return None
 
         if colour in fetch_colours():
             return colour
 
         raise HTTPException(
-            status_code=422, detail='Unprocessable Content: cannot filter colours with given key'
+            status_code=422,
+            detail='Unprocessable Content: cannot filter colours with given key'
         )
 
 
-def fetch_colours() -> List[str]:
+def fetch_column(conn, column, distinct: bool=False) -> list[str]:
+    ''' fetches all distinct values in a column '''
+    stmt = select(column).where(column.is_not(None))
+    response = conn.execute(stmt.distinct() if distinct else stmt)
+    return list(response.scalars().all())
+
+
+def fetch_colours() -> list[str]:
     ''' fetches all coiours used in the treasures table '''
-    with CreateConnection() as conn:
-        response = conn.run('SELECT DISTINCT colour FROM treasures')
-        return flatten(response)
+    if not (conn:= create_connection()):
+        return []
+
+    with conn.begin():
+        return fetch_column(conn, Treasures.colour, distinct=True)
 
 
-def fetch_shop_names() -> List[str]:
+def fetch_shop_names() -> list[str]:
     ''' fetches all shop names in the shops table '''
-    with CreateConnection() as conn:
-        response = conn.run('SELECT shop_name FROM shops')
-        return flatten(response)
+    if not (conn:= create_connection()):
+        return []
+
+    with conn.begin():
+        return fetch_column(conn, Shops.shop_name, distinct=True)
 
 
-def fetch_treasures(params: TreasureQueryParams) -> List[Dict]:
-    ''' fetches rows from treasure table with a given key to sort by '''
+def fetch_treasures(params: TreasureQueryParams) -> dict[str, list[dict]]:
+    """ fetches rows from treasure table using given keys to sort and filter by
 
-    sql = f"""
-    SELECT
-        treasure_id, treasure_name, colour, age, cost_at_auction, shop_name
-    FROM treasures
-    JOIN shops USING(shop_id)
-    WHERE (colour = :colour or :colour = 'NULL')
-    ORDER BY {params.sort_by} {params.order};
+    Args:
+        params (TreasureFields): Parameters to sort and filter by
+
+        params.sort_by (str): The column to sort by
+        params.order (str): 'asc' or 'desc' The order to sort by
+        params.colour (str | None): The colour to filter by, if None, no filter is applied
+
+    Returns:
+        type (dict[str, list[dict]]): A dictionary of treasures with the following structure:
+        {
+            'treasures': [
+                {
+                    'treasure_name': str,
+                    'colour': str,
+                    'age': int,
+                    'cost_at_auction': float(2),
+                    'shop_name': str
+                },
+                ...
+            ]
+        }
     """
-    with CreateConnection() as conn:
-        rows = conn.run(sql, colour=params.colour)
-        if conn.row_count:
-            return format_response(conn.columns, rows, 'treasures')
-        return False
+    if not (conn:= create_connection()):
+        return {}
+
+    sort_dir = desc if params.order == 'desc' else asc
+    # table aliases
+    t = Treasures
+    s = Shops
+
+    with conn.begin():
+        # TODO: implement pagination with limit and offset
+        stmt = (
+            select(
+                t.treasure_id,
+                t.treasure_name,
+                t.colour,
+                t.age,
+                t.cost_at_auction,
+                s.shop_name
+            )
+            .outerjoin(s) # LEFT OUTER JOIN, include treasures without shop_ids
+            .order_by(sort_dir(params.sort_by))
+        )
+
+        if params.colour:
+            stmt = stmt.filter(t.colour == params.colour)
+
+        column_names = stmt.selected_columns.keys()
+        rows = conn.execute(stmt).all()
+        pd_treasures = (pd.DataFrame(rows, columns=column_names).convert_dtypes(dtype_backend='pyarrow'))
+
+        return {'treasures': pd_treasures.to_dict('records')}
 
 
-def insert_treasure(props: Treasure) -> Dict|bool:
-    ''' add a new entry to the treasure table '''
-    dict_props = props.model_dump()
+def insert_treasure(params: TreasureFields) -> dict[str, Any]:
+    """ insert a row into the treasures table
 
-    sql = (
-        """
-        INSERT INTO treasures
-            (treasure_name, colour, age, cost_at_auction, shop_id)
-        VALUES
-            (:treasure_name, :colour, :age, :cost_at_auction, :shop_id)
-        RETURNING *;
-        """
-    )
+    Args: params (TreasureFields): Parameters values to insert
 
-    with CreateConnection() as conn:
-        shop_ids = dict(conn.run('SELECT shop_name, shop_id FROM shops'))
+        params.treasure_name: str
+        Optional:
+        params.colour: str
+        params.age: int
+        params.cost_at_auction: float
+        params.shop_id: int
 
-        if props.shop_name not in shop_ids:
-            return False
+    Returns:
+        type (dict[str, Any]): A dictionary of inserted row with the following structure:
+            {
+                'treasure_id': int,
+                'treasure_name': str,
+                'colour': str,
+                'age': int,
+                'cost_at_auction': float(2),
+                'shop_id': int
+            }
+    """
+    if not (conn:= create_connection()):
+        return {}
 
-        rows = conn.run(sql, shop_id=shop_ids[props.shop_name], **dict_props)
-        if conn.row_count:
-            return format_response(conn.columns, rows)[0]
-        return False
+    with conn.begin():
+        t = Treasures
+        params_dict = params.model_dump()
+        stmt = (
+            insert(t)
+            .values(params_dict)
+            .returning(*t.__table__.c)
+        )
+
+        result = conn.execute(stmt)
+    # return the inserted row as a dictionary
+    return dict(result.mappings().one())
