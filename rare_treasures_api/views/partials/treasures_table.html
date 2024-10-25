@@ -20,7 +20,11 @@
     <td>{{ treasure.treasure_name }}</td>
     <td>{{ treasure.colour }}</td>
     <td>{{ treasure.age }}</td>
+    {% if treasure.cost_at_auction == None %}
+    <td>Not for sale</td>
+    {% else %}
     <td>£{{ '{:0.2f}'.format(treasure.cost_at_auction) }}</td>
+    {% endif %}
     <td>{{ treasure.shop_name }}</td>
   </tr>
   {% endfor %}
