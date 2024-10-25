@@ -9,13 +9,12 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
-# Check if the virtual environment directory exists
-if [ ! -d "$VENV_DIR" ]; then
-  echo "Creating virtual environment..."
-  python -m venv $VENV_DIR
-else
-  echo "Virtual environment already exists."
-fi
+# clean up
+rm -rf $VENV_DIR
+rm -rf __pycache__
+
+# Create the virtual environment
+python3.12 -m venv $VENV_DIR
 
 # Activate the virtual environment
 echo "Activating virtual environment..."
