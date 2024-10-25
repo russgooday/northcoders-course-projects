@@ -4,9 +4,9 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from ..dependencies import root_dir
+from ..dependencies import ROOT_PATH
 from ..models.model_treasures import (
-    Treasure,
+    TreasureFields,
     TreasureQueryParams,
     fetch_treasures,
     insert_treasure,
@@ -15,15 +15,16 @@ from ..models.model_treasures import (
 
 
 router = APIRouter()
-templates = Jinja2Templates(directory=f'{root_dir}/views')
+templates = Jinja2Templates(directory=f'{ROOT_PATH}/views')
 
 
 # Homepage
 @router.get('/', response_class=HTMLResponse)
 def homepage(request: Request) -> HTMLResponse:
     ''' return the home page '''
+    colours = fetch_colours()
     return templates.TemplateResponse(
-        request, name='index.html', context={'colours': fetch_colours()}
+        request, name='index.html', context={'colours': colours}
     )
 
 
@@ -37,7 +38,7 @@ def get_healthcheck() -> Dict:
 # Fetch all treasures
 # Returns an HTML table of all treasures
 @router.get('/api/treasures', response_class=HTMLResponse)
-def get_treasures(request: Request, params = Depends(TreasureQueryParams)) -> HTMLResponse:
+def get_treasures(request: Request, params=Depends(TreasureQueryParams)) -> HTMLResponse:
     ''' return all treasures and their shop details '''
 
     if (treasures := fetch_treasures(params)):
@@ -50,7 +51,7 @@ def get_treasures(request: Request, params = Depends(TreasureQueryParams)) -> HT
 
 # Add a treasure
 @router.post('/api/treasures')
-def add_treasure(treasure: Treasure) -> Dict:
+def add_treasure(treasure: TreasureFields) -> Dict:
     ''' Add a treasure to the treasures table '''
     if (inserted_treasure := insert_treasure(treasure)):
         return inserted_treasure
