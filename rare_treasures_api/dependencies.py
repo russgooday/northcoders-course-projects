@@ -1,2 +1,2 @@
 from os import path
-root_dir = path.dirname(__file__)
+ROOT_PATH = path.dirname(__file__)
