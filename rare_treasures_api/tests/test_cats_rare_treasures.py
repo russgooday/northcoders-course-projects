@@ -1,15 +1,22 @@
 '''This module contains the test suite for the `Cat's Rare Treasures` FastAPI app.'''
+from typing import Optional
 from pytest import mark, fixture
 from fastapi.testclient import TestClient
 from rare_treasures_api.main import app
-from rare_treasures_api.utils.fp_getters import get_values
+from rare_treasures_api.utils.fp_utils import get_values
 from rare_treasures_api.db.run_seed import run_seed
-run_seed('test')
 
-@fixture(scope='function')
+if not (row_counts:= run_seed('test')):
+    raise RuntimeError('Database seeding failed')
+
+SHOPS_ROW_COUNT, TREASURES_ROW_COUNT = row_counts
+
+
+@fixture(scope='class')
 def test_client():
-    return TestClient(app)
-
+    yield TestClient(app)
+    # clean up
+    run_seed('test')
 
 @fixture(scope='function')
 def get_treasures(test_client):
@@ -30,51 +37,53 @@ class TestTreasuresRouteHandlers:
 
 
     @mark.it('testing correct types on the returned treasures data')
-    @mark.parametrize('sort_by, expected_type', [
+    @mark.parametrize('name, expected_type', [
             ('treasure_id', int),
             ('treasure_name', str),
-            ('colour', str),
-            ('age', int),
-            ('cost_at_auction', float),
-            ('shop_name', str)
+            ('colour', Optional[str]),
+            ('age', Optional[int]),
+            ('cost_at_auction', Optional[float]),
+            ('shop_name', Optional[str])
     ])
-    def test_all_treasures(self, sort_by, expected_type, test_client):
+    def test_all_treasures(self, name, expected_type, test_client): # name, expected_type,
         response = test_client.get('/api/treasures')
         treasures = response.context['treasures']
 
         assert response.status_code == 200
-        assert len(treasures) == 26
+        assert len(treasures) == TREASURES_ROW_COUNT
 
         for treasure in treasures:
-            assert isinstance(treasure[sort_by], expected_type)
+            assert isinstance(treasure[name], expected_type)
 
 
     @mark.it('testing is sorted by default in ascending order by age')
     def test_sorted_by_age(self, get_treasures):
         treasures = get_treasures('/api/treasures')
+        sort_by_age = get_values('age', replace_none=True, sub=float('inf'))
+        sorted_treasures = sorted(treasures, key=sort_by_age)
 
-        assert treasures == sorted(treasures, key=get_values('age'))
+        assert treasures == sorted_treasures
 
 
     @mark.it('testing is sortable by query parameter')
     @mark.parametrize('sort_by', ['age', 'treasure_name', 'cost_at_auction'])
     def test_sort_by_query(self, sort_by, get_treasures):
         treasures = get_treasures(f'/api/treasures?sort_by={sort_by}')
-
-        assert treasures == sorted(treasures, key=get_values(sort_by))
+        sort_by_key = get_values(sort_by, replace_none=True, sub=float('inf'))
+        assert treasures == sorted(treasures, key=sort_by_key)
 
 
     @mark.it(
         'testing that a given order will return the table in ascending or descending order'
     )
     def test_ordering(self, get_treasures):
-        age = get_values('age')
+        sort_by_age = get_values('age', replace_none=True, sub=float('inf'))
 
         treasures_desc = get_treasures('/api/treasures?order=desc')
         treasures_asc = get_treasures('/api/treasures?order=asc')
 
-        assert treasures_desc == sorted(treasures_desc, reverse=True, key=age)
-        assert treasures_asc == sorted(treasures_asc, key=age)
+        assert treasures_desc == sorted(treasures_desc, reverse=True, key=sort_by_age)
+        assert treasures_asc == sorted(treasures_asc, key=sort_by_age)
 
 
     @mark.it(
@@ -84,8 +93,11 @@ class TestTreasuresRouteHandlers:
         treasure_sorted_desc = get_treasures('/api/treasures?sort_by=treasure_name&order=desc')
         treasure_sorted_asc = get_treasures('/api/treasures?sort_by=cost_at_auction&order=asc')
 
-        assert treasure_sorted_desc == sorted(treasure_sorted_desc, reverse=True, key=get_values('treasure_name'))
-        assert treasure_sorted_asc == sorted(treasure_sorted_asc, key=get_values('cost_at_auction'))
+        sort_by_treasure = get_values('treasure_name', replace_none=True, sub=float('inf'))
+        sort_by_cost_at_auction = get_values('cost_at_auction', replace_none=True, sub=float('inf'))
+
+        assert treasure_sorted_desc == sorted(treasure_sorted_desc, reverse=True, key=sort_by_treasure)
+        assert treasure_sorted_asc == sorted(treasure_sorted_asc, key=sort_by_cost_at_auction)
 
 
     @mark.it('testing redirects with error 400 when given an invalid sort_by query parameter')
@@ -103,6 +115,41 @@ class TestTreasuresRouteHandlers:
     @mark.it('testing responds with certain colour only')
     def test_filter_by_colour(self, get_treasures):
         ''' test that the treasures are filtered by colour '''
-        treasures = get_treasures('/api/treasures?colour=onyx')
+        treasures = get_treasures('/api/treasures?colour=gold')
+        assert all(treasure['colour'] == 'gold' for treasure in treasures)
 
-        assert all(treasure['colour'] == 'onyx' for treasure in treasures)
+
+    @mark.it(
+        'test inserts row into database and returns the newly inserted row in dict format'
+    )
+    def test_insert_treasure(self, test_client):
+        row_1_to_insert = {
+            'treasure_name': 'The Golden Fleece',
+            'colour': 'gold',
+            'age': 1000,
+            'cost_at_auction': 1000000.00,
+            'shop_id': 5
+        }
+
+        # test for optional empty fields
+        row_2_to_insert = {'treasure_name': 'The Silver Chalice'}
+
+        response_1 = test_client.post('/api/treasures', json=row_1_to_insert)
+        response_2 = test_client.post('/api/treasures', json=row_2_to_insert)
+
+        assert response_1.status_code == 200
+        assert response_2.status_code == 200
+
+        assert response_1.json() == {
+            'treasure_id': TREASURES_ROW_COUNT + 1,
+            **row_1_to_insert
+        }
+
+        assert response_2.json() == {
+            'treasure_id': TREASURES_ROW_COUNT + 2,
+            'treasure_name': 'The Silver Chalice',
+            'colour': None,
+            'age': None,
+            'cost_at_auction': None,
+            'shop_id': None
+        }
