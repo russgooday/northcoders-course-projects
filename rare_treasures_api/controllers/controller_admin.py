@@ -2,10 +2,10 @@
 from fastapi.responses import HTMLResponse
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
-from ..dependencies import root_dir
+from ..dependencies import ROOT_PATH
 
 router = APIRouter()
-templates = Jinja2Templates(directory=f'{root_dir}/views')
+templates = Jinja2Templates(directory=f'{ROOT_PATH}/views')
 
 # Add treasure item to a shop
 @router.get('/add-treasure', response_class=HTMLResponse)
