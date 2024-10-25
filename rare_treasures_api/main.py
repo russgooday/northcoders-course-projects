@@ -4,9 +4,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import RequestValidationError
 from fastapi.templating import Jinja2Templates
 
-from .dependencies import root_dir
+from .dependencies import ROOT_PATH
 from .controllers import treasures_router, admin_router
-templates = Jinja2Templates(directory=f'{root_dir}/views')
+templates = Jinja2Templates(directory=f'{ROOT_PATH}/views')
 
 app = FastAPI()
 app.include_router(treasures_router)
@@ -34,4 +34,4 @@ async def handler_404(request: Request, __):
     )
 
 # Serve static files
-app.mount('/public', StaticFiles(directory=f'{root_dir}/public', html=True), name='public')
+app.mount('/public', StaticFiles(directory=f'{ROOT_PATH}/public', html=True), name='public')
