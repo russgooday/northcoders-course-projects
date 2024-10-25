@@ -1,2 +1,15 @@
 [run]
-omit = examples*.py
+omit =
+    examples*.py
+    */db/pg8000/*
+    */db/sqla_raw_sql/*
+    */models/pg8000/*
+    */utils/pg8000/*
+
+[report]
+omit =
+    examples*.py
+    */db/pg8000/*
+    */db/sqla_raw_sql/*
+    */models/pg8000/*
+    */utils/pg8000/*
