@@ -1,35 +1,47 @@
-''' Database connection module '''
+''' Database connection module for SQLAlchemy '''
 from os import environ as env
 from dotenv import load_dotenv
-from pg8000.native import Connection, DatabaseError
-from fastapi import HTTPException
-from ..dependencies import root_dir
+from sqlalchemy import create_engine, URL
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
+from ..dependencies import ROOT_PATH
+from .logger import log_query_time
 
+# Load the environment variables based on the app environment
 APP_ENV = env.get('APP_ENV', default='test')
-load_dotenv(f'{root_dir}/.env.{APP_ENV}')
+load_dotenv(f'{ROOT_PATH}/.env.{APP_ENV}')
 
-print(f'\nAPP_ENV: {APP_ENV}')
+print(f'\nEnvironment: {APP_ENV}')
 
-class CreateConnection():
-    ''' context manager for connection '''
-    def __init__(self):
-        self.connection = None
+# create a connection URL for SQLAlchemy
+CONNECTION_URL = URL.create(
+    'postgresql+pg8000',
+    username    = env.get('PG_USER'),
+    password    = env.get('PG_PASSWORD'),
+    host        = env.get('PG_HOST'),
+    database    = env.get('PG_DATABASE'),
+    port        = env.get('PG_PORT')
+)
 
-    def __enter__(self):
-        try:
-            self.connection = Connection(
-                env.get('PG_USER'),
-                password=env.get('PG_PASSWORD'),
-                database=env.get('PG_DATABASE'),
-                host=env.get('PG_HOST'),
-                port=int(env.get('PG_PORT')),
-                ssl_context=bool(env.get('PG_SSL_CONTEXT'))
-            )
-            return self.connection
-        except DatabaseError as exc:
-            raise HTTPException(status_code=500, detail=exc) from exc
+# Create the SQLAlchemy engine
+engine = create_engine(CONNECTION_URL, echo=False, hide_parameters=True)
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if isinstance(self.connection, Connection):
-            self.connection.close()
-            self.connection = None
+def create_connection(logging: str = ''):
+    ''' Standard function to create a connection '''
+    try:
+        if logging:
+            log_query_time(f'log.{APP_ENV}.{logging}')
+        return engine.connect()
+    except SQLAlchemyError as exc:
+        print(f'Error during connection: {exc}')
+        return None
+
+def create_session(logging: str = ''):
+    ''' Standard function to create a session '''
+    try:
+        if logging:
+            log_query_time(f'log.{APP_ENV}.{logging}')
+        return Session(engine)
+    except SQLAlchemyError as exc:
+        print(f'Error with session: {exc}')
+        return None
