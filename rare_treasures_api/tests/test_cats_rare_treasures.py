@@ -14,20 +14,25 @@ SHOPS_ROW_COUNT, TREASURES_ROW_COUNT = row_counts
 
 @fixture(scope='class')
 def test_client():
+    ''' returns a test client for the FastAPI app '''
     yield TestClient(app)
     # clean up
     run_seed('test')
 
 @fixture(scope='function')
 def get_treasures(test_client):
+    ''' returns the treasures data from the given url '''
     return lambda url: test_client.get(url).context['treasures']
 
 
 @mark.describe('testing treasure route handlers')
 class TestTreasuresRouteHandlers:
+    '''Test suite for the treasure route handlers'''
 
     @mark.it('testing an initial healthcheck responds with a message and 200 OK')
     def test_health_check(self, test_client):
+        ''' test that the healthcheck route responds with a message and 200 OK '''
+
         response = test_client.get('/api/healthcheck')
 
         assert response.status_code == 200
@@ -45,7 +50,9 @@ class TestTreasuresRouteHandlers:
             ('cost_at_auction', Optional[float]),
             ('shop_name', Optional[str])
     ])
-    def test_all_treasures(self, name, expected_type, test_client): # name, expected_type,
+    def test_all_treasures(self, name, expected_type, test_client):
+        ''' test that the returned treasures have the correct types '''
+
         response = test_client.get('/api/treasures')
         treasures = response.context['treasures']
 
@@ -58,6 +65,8 @@ class TestTreasuresRouteHandlers:
 
     @mark.it('testing is sorted by default in ascending order by age')
     def test_sorted_by_age(self, get_treasures):
+        ''' test that the treasures are sorted by age in ascending order '''
+
         treasures = get_treasures('/api/treasures')
         sort_by_age = get_values('age', replace_none=True, sub=float('inf'))
         sorted_treasures = sorted(treasures, key=sort_by_age)
@@ -68,6 +77,8 @@ class TestTreasuresRouteHandlers:
     @mark.it('testing is sortable by query parameter')
     @mark.parametrize('sort_by', ['age', 'treasure_name', 'cost_at_auction'])
     def test_sort_by_query(self, sort_by, get_treasures):
+        ''' test that the treasures are sorted by the given query parameter '''
+
         treasures = get_treasures(f'/api/treasures?sort_by={sort_by}')
         sort_by_key = get_values(sort_by, replace_none=True, sub=float('inf'))
         assert treasures == sorted(treasures, key=sort_by_key)
@@ -77,6 +88,8 @@ class TestTreasuresRouteHandlers:
         'testing that a given order will return the table in ascending or descending order'
     )
     def test_ordering(self, get_treasures):
+        ''' test that the treasures are sorted in the correct order '''
+
         sort_by_age = get_values('age', replace_none=True, sub=float('inf'))
 
         treasures_desc = get_treasures('/api/treasures?order=desc')
@@ -90,6 +103,7 @@ class TestTreasuresRouteHandlers:
         'testing that a combination of sort_by and order returns the table in the correct order'
     )
     def test_sort_by_and_ordering(self, get_treasures):
+        ''' test that the treasures are sorted in the correct order '''
         treasure_sorted_desc = get_treasures('/api/treasures?sort_by=treasure_name&order=desc')
         treasure_sorted_asc = get_treasures('/api/treasures?sort_by=cost_at_auction&order=asc')
 
@@ -102,6 +116,8 @@ class TestTreasuresRouteHandlers:
 
     @mark.it('testing redirects with error 400 when given an invalid sort_by query parameter')
     def test_invalid_sort_query(self, test_client):
+        ''' test that the treasures are sorted by the given query parameter '''
+
         response_1 = test_client.get('/api/treasures?sort_by=abc_abc').context
         response_2 = test_client.get('/api/treasures?sort_by=id=1 OR 1=1').context
 
@@ -123,6 +139,8 @@ class TestTreasuresRouteHandlers:
         'test inserts row into database and returns the newly inserted row in dict format'
     )
     def test_insert_treasure(self, test_client):
+        ''' test that a new treasure can be inserted into the database '''
+
         row_1_to_insert = {
             'treasure_name': 'The Golden Fleece',
             'colour': 'gold',
