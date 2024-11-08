@@ -15,7 +15,7 @@ def get_parent(i:int) -> int:
     return i - 1 >> 1
 
 
-def min_heapify(heap: list, pos:int) -> list:
+def min_heapify(heap: list, pos:int) -> None:
     ''' reorganises the a nodes from a given index so that they maintain the heap property '''
     heap_size = len(heap)
     parent = pos
