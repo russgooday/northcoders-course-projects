@@ -1,7 +1,7 @@
 # Bash Scripting Exercises
 ### Working with the filesystem
 
-This script will search the `staff` folder for a staff member with the given ID and return the staff member's details.
+This scripts will carry out search tasks on the filesystem outputting formatted responses.
 
 ### Setup
 
@@ -11,6 +11,8 @@ This will allow the script to modify the `PATH` variable of the current shell se
 e.g. `find-staff-by-id 002` instead of `./bin/find-staff-by-id 002`.
 
 The script will also install the `jq` command line tool which is used to parse JSON files. For more info on `jq` see: https://stedolan.github.io/jq/
+
+Source code for bash scripts can in the `bin` folder [here](./bin/)
 
 **Run setup from bash**
 ```bash
