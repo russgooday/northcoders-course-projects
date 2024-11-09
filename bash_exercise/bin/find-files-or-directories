@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# colours
+NORMAL=$(tput sgr0 setaf 15)
+PRIMARY=$(tput setaf 10 bold)
+SECONDARY=$(tput setaf 5 bold)
+
+# splits path into array and returns last element
+function get_local_path() {
+    local path=$1
+    local path_parts=(${path//\.\// })
+
+    echo "${path_parts[-1]}"
+}
+
+# Function: get_dir_contents
+# Description: Generates an output string with the contents of a directory.
+# Parameters:
+#   $1 - full_path (full path of directory)
+# Outputs: Formatted string
+function get_dir_contents() {
+    local output=""
+    local full_path=$1
+    local local_path=$(get_local_path $full_path)
+
+    output+="${PRIMARY}Contents of directory ${SECONDARY}./$local_path:\n${NORMAL}"
+    output+=$(ls -otg $local_path --human-readable --color=always)
+    echo -e "$output\n\r\n\r"
+}
+
+# Function: get_file
+# Description: Generates an output string for the file.
+# Parameters:
+#   $1 - full_path (full path of directory)
+# Outputs: Formatted string
+function get_file() {
+    local output=""
+    local full_path=$1
+    local local_path=$(get_local_path $full_path)
+
+    output+=$(ls -og $local_path --human-readable --color=always)
+    echo -e "$output\n\r"
+}
+
+# Function: create_output
+# Description: Generates an output string based on provided parameters.
+# Parameters:
+#   $1 - dir_count (number of directories found)
+#   $2 - file_count (number of files found)
+#   $3 - name (name of file to find)
+#   $4 - directories (directories found)
+#   $5 - files (files found)
+# Outputs: Formatted output string
+function output_result() {
+    local dir_count=$1
+    local file_count=$2
+    local name=$3
+    local directories=$4
+    local files=$5
+    local type_found=""
+    local output=""
+
+    if [[ -n $directories ]]; then
+        ((dir_count > 1)) && type_found="directories" || type_found="directory"
+        output+="\n${PRIMARY}Found $dir_count $type_found with name ${SECONDARY}'$name'${NORMAL}\n\n$directories\n"
+    fi
+
+    if [[ -n $files ]]; then
+        ((file_count > 1)) && type_found="files" || type_found="file"
+        output+="\n${PRIMARY}Found $file_count $type_found with name ${SECONDARY}'$name'${NORMAL}\n\n$files\n"
+    fi
+
+    printf "$output"
+}
+
+# Function: find_files
+# Description: Finds files and directories with the provided name.
+# Parameters:
+#   $1 - name (name of file to find)
+function find_files() {
+    local name=$1
+    local found_files=$(find . -path "*$name")
+    local file_count=0
+    local dir_count=0
+    local directories=""
+    local files=""
+
+    if [[ -z $found_files ]]; then
+        echo "${PRIMARY}file or directory $name does not exist${NORMAL}"
+        return
+    fi
+
+    for item in $found_files; do
+        if [[ -d $item ]]; then
+            directories+=$(get_dir_contents $item)
+            ((dir_count++))
+        elif [[ -f $item ]]; then
+            files+=$(get_file $item)
+            ((file_count++))
+        fi
+    done
+
+    output_result "$dir_count" "$file_count" "$name" "$directories" "$files"
+}
+
+# Function: main
+# Description: Main function
+# Outputs: Prompts user for input
+# Calls: find_files with that input
+# Exits: 1 if no input provided
+function main() {
+    read -p "${NORMAL}Enter name of file or directory: " name
+
+    if [[ -z $name ]]; then
+        printf "${PRIMARY}No file or directory name entered${NORMAL}"
+        exit 1
+    fi
+
+    find_files "$name"
+}
+
+main
+exit 0

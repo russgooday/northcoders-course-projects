@@ -5,6 +5,7 @@ omit =
     */db/sqla_raw_sql/*
     */models/pg8000/*
     */utils/pg8000/*
+    */bash_exercise/*
 
 [report]
 omit =
@@ -13,3 +14,4 @@ omit =
     */db/sqla_raw_sql/*
     */models/pg8000/*
     */utils/pg8000/*
+    */bash_exercise/*
