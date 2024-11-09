@@ -56,7 +56,7 @@ If no staff member exists with the given number a message will be returned. If n
 
 If a successful match is found the name of the staff member and their details will be outputted.
 
-#### Example
+### Example
 
 Using the following staff member's json source file as an example.
 
@@ -73,14 +73,7 @@ find-staff-by-id 16
 
 This script will search for a given folder or filename and return the found file or folder and it's contents.
 
-
-**Terminal**
-```bash
-find-files-or-directories
-Enter name of file or directory: # enter folder or file name
-```
-
-#### Example
+### Example
 
 **Terminal**
 ```bash
